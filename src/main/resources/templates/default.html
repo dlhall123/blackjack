@@ -2,51 +2,74 @@
 <html>
 	<head>
 		<meta charset="ISO-8859-1">
-		<title>Insert title here</title>
+		<title>Blackjack</title>
 	</head>
 	<body>
-		<h1>Deck</h1>
-		<table>
-			<thead>
-				<tr>
-					<th>Suit</th>
-					<th>Rank</th>
-				</tr>
-			</thead>
-			<tbody>
-				{{#game.cardDeck.getDeck}}
-				<tr>
-					<td>{{ suit }}</td>
-					<td>{{ rank }} </td>
-					<td>{{ value }}</td>
-				</tr>
-				{{/game.cardDeck.getDeck}}
-
-			</tbody>
-		</table>
-		<h1>Player Hand</h1>
-		<table>
-			<thead>
-				<tr>
-					<th>Suit</th>
-					<th>Rank</th>
-				</tr>
-			</thead>
-			<tbody>
-				{{#game.player.getHand}}
-				<tr>
-					<td>{{ suit }}</td>
-					<td>{{ rank }} </td>
-					<td>{{ value }}</td>
-				</tr>
-				{{/game.player.getHand}}
-
-			</tbody>
-		</table>
-		<h2>Player hand value: {{game.player.handValue}}</h2>
-		<form method="post" action="/hit">
-			<button>Hit</button>
+		{{#game.isGameOver}}
+		<form method="post" action="/newGame">
+			<label>Input the number of decks to play with
+				<input type="text" format="number" name="numDecks" required>
+			</label>
+			<button>Deal</button>
 		</form>
+		{{/game.isGameOver}}
+		<div id="dealerHand" class="cards">
+					<h1>Dealer Hand</h1>
+			<table>
+				<thead>
+					<tr>
+						<th>Suit</th>
+						<th>Rank</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#game.getDealerHand.hand}}
+					<tr>
+						<td>{{ suit }}</td>
+						<td>{{ rank }} </td>
+						<td>{{ value }}</td>
+					</tr>
+					{{/game.getDealerHand.hand}}
+	
+				</tbody>
+			</table>
+			<h2>Dealer hand value: {{game.getDealerHand.handValue}}</h2>
+		</div>
+		<div id="playerHand" class="cards">
+			<h1>Player Hand</h1>
+			<table>
+				<thead>
+					<tr>
+						<th>Suit</th>
+						<th>Rank</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#game.getPlayerHand.hand}}
+					<tr>
+						<td>{{ suit }}</td>
+						<td>{{ rank }} </td>
+						<td>{{ value }}</td>
+					</tr>
+					{{/game.getPlayerHand.hand}}
+	
+				</tbody>
+			</table>
+			<h2>Player hand value: {{game.getPlayerHand.handValue}}</h2>			
+			{{^game.getPlayerHand.isBusted}}
+			<form method="post" action="/hit">
+				<button>Hit</button>
+			</form>
+				<form method="post" action="/stand">
+				<button>Stand</button>
+			</form>
+			{{/game.getPlayerHand.isBusted}}
+			{{#game.getPlayerHand.isBusted}}
+			<h2>player busted!</h2>
+			{{/game.getPlayerHand.isBusted}}
+			
+
+		</div>
 		{{ game.cardsInDeck }}
 		
 	

@@ -1,30 +1,22 @@
 package com.lmig.gfc.blackjack.models;
 
-import java.util.ArrayList;
+public class Player implements Person {
 
-public class Player {
-	
-	private ArrayList<Card> hand;
-	private int handValue;
-	
-	public Player(Deck deck) {
-		hand = new ArrayList<Card>();
-		hit(deck);
-		hit(deck);
-	}
-	
-	public void hit(Deck deck) {
-		Card hitCard = deck.getCard();
-		hand.add(hitCard);
-		handValue += hitCard.getValue();
+	private Hand hand;
+
+	public Player() {
+		hand = new Hand();
 	}
 
-	public ArrayList<Card> getHand() {
+	@Override
+	public Hand getHand() {
 		return hand;
 	}
 
-	public int getHandValue() {
-		return handValue;
+	@Override
+	public void addToHand(Card card) {
+		hand.addToHand(card);
+
 	}
 
 }

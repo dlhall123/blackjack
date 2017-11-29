@@ -1,19 +1,8 @@
 package com.lmig.gfc.blackjack.models;
 
-import java.util.ArrayList;
+public interface Person {
 
-public abstract class Person {
-	private ArrayList<Card> hand;
-	private int handValue;
-	
-	protected abstract void hit(Deck deck);
+	public Hand getHand();
 
-	public ArrayList<Card> getHand() {
-		return hand;
-	}
-
-	public int getHandValue() {
-		return handValue;
-	}
-
+	public void addToHand(Card card);
 }

@@ -10,29 +10,41 @@ import com.lmig.gfc.blackjack.models.BlackjackGame;
 @Controller
 public class BlackjackController {
 	BlackjackGame game;
-	
+
 	public BlackjackController() {
 		game = new BlackjackGame();
 	}
-	
-	
+
 	@GetMapping("/")
 	public ModelAndView defaultPage() {
-		game = new BlackjackGame();
-		game.newGame();
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("default");
 		mv.addObject("game", game);
-		return mv; 
+		return mv;
 	}
-	
+
+	@PostMapping("/newGame")
+	public ModelAndView deal(int numDecks) {
+		game.newGame(numDecks);
+		return redirectToHome();
+	}
+
 	@PostMapping("/hit")
 	public ModelAndView hit() {
-		game.hit();
+		game.hitPlayer();
+		return redirectToHome();
+	}
+
+	@PostMapping("/stand")
+	public ModelAndView stand() {
+		game.stand();
+		return redirectToHome();
+	}
+
+	private ModelAndView redirectToHome() {
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("default");
-		mv.addObject("game", game);
-		return mv; 
+		mv.setViewName("redirect:/");
+		return mv;
 	}
 
 }

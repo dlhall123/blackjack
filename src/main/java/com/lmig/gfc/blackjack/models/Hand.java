@@ -7,6 +7,7 @@ public class Hand {
 	private int handValue = 0;
 	private boolean isBlackjack = false;
 	private boolean isBusted = false;
+	private int numAcesCounted11 = 0;
 
 	public Hand() {
 		hand = new ArrayList<Card>();
@@ -14,11 +15,21 @@ public class Hand {
 
 	public void addToHand(Card card) {
 		handValue += card.getValue();
+		if (card.getValue() == 11) {
+			numAcesCounted11 += 1;
+		}
+
 		hand.add(card);
 
 		if (hand.size() == 2 && handValue == 21) {
 			isBlackjack = true;
 		}
+
+		while (handValue > 21 && numAcesCounted11 > 0) {
+			handValue -= 10;
+			numAcesCounted11 -= 1;
+		}
+
 		if (handValue > 21) {
 			isBusted = true;
 		}

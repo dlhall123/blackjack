@@ -25,6 +25,7 @@ public class BlackjackController {
 
 	@PostMapping("/newGame")
 	public ModelAndView deal(int numDecks) {
+		game = new BlackjackGame();
 		game.newGame(numDecks);
 		return redirectToHome();
 	}
@@ -38,6 +39,12 @@ public class BlackjackController {
 	@PostMapping("/stand")
 	public ModelAndView stand() {
 		game.stand();
+		return redirectToHome();
+	}
+
+	@PostMapping("/newHand")
+	public ModelAndView newHand() {
+		game.newHand();
 		return redirectToHome();
 	}
 

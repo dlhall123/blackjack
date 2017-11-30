@@ -1,22 +1,15 @@
 package com.lmig.gfc.blackjack.models;
 
-public class Player implements Person {
-
-	private Hand hand;
+public class Player extends Person {
+	Wallet wallet;
 
 	public Player() {
-		hand = new Hand();
+		super();
+		wallet = new Wallet(100);
 	}
 
-	@Override
-	public Hand getHand() {
-		return hand;
-	}
-
-	@Override
-	public void addToHand(Card card) {
-		hand.addToHand(card);
-
+	public Wallet getWallet() {
+		return wallet;
 	}
 
 }

@@ -3,13 +3,12 @@ package com.lmig.gfc.blackjack.models;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Deck {
-	private ArrayList<Card> deck;
+public class Shoe {
+	private ArrayList<Card> shoe;
 
-	public Deck(int numDecks) {
-		deck = new ArrayList<Card>();
+	public Shoe(int numDecks) {
+		shoe = new ArrayList<Card>();
 		initialize(numDecks);
-		shuffle();
 	}
 
 	private void initialize(int numDecks) {
@@ -17,24 +16,21 @@ public class Deck {
 			for (Suit s : Suit.values()) {
 				for (Rank r : Rank.values()) {
 					Card card = new Card(s, r);
-					deck.add(card);
+					shoe.add(card);
 				}
 			}
 		}
-	}
-
-	private void shuffle() {
-		Collections.shuffle(deck);
+		Collections.shuffle(shoe);
 	}
 
 	public Card getCard() {
-		Card returnCard = deck.get(0);
-		deck.remove(0);
+		Card returnCard = shoe.get(0);
+		shoe.remove(0);
 		return returnCard;
 	}
 
-	public ArrayList<Card> getDeck() {
-		return deck;
+	public ArrayList<Card> getShoe() {
+		return shoe;
 	}
 
 }

@@ -5,14 +5,14 @@
 		<title>Blackjack</title>
 	</head>
 	<body>
-		{{#game.isGameOver}}
+		{{#game.newGame}}
 		<form method="post" action="/newGame">
 			<label>Input the number of decks to play with
 				<input type="text" format="number" name="numDecks" required>
 			</label>
 			<button>Deal</button>
 		</form>
-		{{/game.isGameOver}}
+		{{/game.newGame}}
 		<div id="dealerHand" class="cards">
 					<h1>Dealer Hand</h1>
 			<table>
@@ -27,7 +27,6 @@
 					<tr>
 						<td>{{ suit }}</td>
 						<td>{{ rank }} </td>
-						<td>{{ value }}</td>
 					</tr>
 					{{/game.getDealerHand.hand}}
 	
@@ -49,28 +48,50 @@
 					<tr>
 						<td>{{ suit }}</td>
 						<td>{{ rank }} </td>
-						<td>{{ value }}</td>
 					</tr>
 					{{/game.getPlayerHand.hand}}
 	
 				</tbody>
 			</table>
-			<h2>Player hand value: {{game.getPlayerHand.handValue}}</h2>			
-			{{^game.getPlayerHand.isBusted}}
-			<form method="post" action="/hit">
-				<button>Hit</button>
-			</form>
-				<form method="post" action="/stand">
-				<button>Stand</button>
-			</form>
-			{{/game.getPlayerHand.isBusted}}
-			{{#game.getPlayerHand.isBusted}}
-			<h2>player busted!</h2>
-			{{/game.getPlayerHand.isBusted}}
-			
-
+			<h2>Player hand value: {{game.getPlayerHand.handValue}}</h2>
+			{{#game.playerTurn}}			
+				{{^game.getPlayerHand.isBusted}}
+				<form method="post" action="/hit">
+					<button>Hit</button>
+				</form>
+					<form method="post" action="/stand">
+					<button>Stand</button>
+				</form>
+				{{/game.getPlayerHand.isBusted}}
+			{{/game.playerTurn}}
+			{{#game.isGameOver}}
+				{{#game.getPlayerHand.isBusted}}
+				<h2>player busted!</h2>
+				{{/game.getPlayerHand.isBusted}}
+				
+				{{#game.getDealerHand.isBusted}}
+				<h2>dealer busted!</h2>
+				{{/game.getDealerHand.isBusted}}			
+				
+				{{#game.playerWinner}}
+				<h1>Player Wins!</h1>
+				{{/game.playerWinner}}
+				
+				{{#game.push}}
+				<h1>Push</h1>
+				{{/game.push}}
+				
+				{{#game.dealerWinner}}
+				<h1>Dealer Wins!</h1>
+				{{/game.dealerWinner}}		
+				<form method="post" action="/newHand">
+					<button>New Hand</button>
+				</form>	
+			{{/game.isGameOver}}
+			<h2>Player Wallet: ${{game.getWallet.amount}}</h2>
 		</div>
-		{{ game.cardsInDeck }}
+		<p>Cards Remaining in current shoe: {{ game.cardsInDeck }}.</p>  
+		<p>Auto shuffle occurs when at or below 15 cards remaining in the shoe and a new hand is started</p>
 		
 	
 	</body>

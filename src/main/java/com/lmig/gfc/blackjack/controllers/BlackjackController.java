@@ -24,9 +24,9 @@ public class BlackjackController {
 	}
 
 	@PostMapping("/newGame")
-	public ModelAndView deal(int numDecks) {
+	public ModelAndView deal(int numDecks, int walletAmount, int betAmount) {
 		game = new BlackjackGame();
-		game.newGame(numDecks);
+		game.newGame(numDecks, walletAmount, betAmount);
 		return redirectToHome();
 	}
 

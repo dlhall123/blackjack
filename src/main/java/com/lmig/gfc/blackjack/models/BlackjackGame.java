@@ -2,7 +2,6 @@
 //Implement something if the player runs out of cash
 //Implement ability to set amount in wallet at game start
 //Implement Dealer and Player win counters
-//Dealer Up Card/Hole Card - only show up card at start
 //change view to use getters
 //More testing on Aces 11/1 logic
 //Review and clean up code in general
@@ -14,6 +13,7 @@ public class BlackjackGame {
 	private Shoe cardShoe;
 	private Player player;
 	private Person dealer;
+	private Card holeCard;
 	private int cardsInDeck;
 	private int numDecks;
 	private int bet = 10; // Implement ability to set from user input
@@ -27,16 +27,16 @@ public class BlackjackGame {
 	private boolean playerTurn = true;
 
 	public BlackjackGame() {
-		player = new Player();
-		dealer = new Person();
-
+		player = null;
+		dealer = null;
 	}
 
-	public void newGame(int numDecks) {
+	public void newGame(int numDecks, int walletAmount, int betAmount) {
 		this.numDecks = numDecks;
+		this.bet = betAmount;
 		newGame = false;
 		cardShoe = new Shoe(numDecks);
-		player = new Player();
+		player = new Player(walletAmount);
 		dealer = new Person();
 		newHand();
 
@@ -64,7 +64,7 @@ public class BlackjackGame {
 		hit(player);
 		hit(dealer);
 		hit(player);
-		hit(dealer);
+		holeCard = cardShoe.getACard();
 		if (getPlayerHand().isBlackjack() || getDealerHand().isBlackjack()) {
 			evaluateWinner();
 		}
@@ -81,6 +81,7 @@ public class BlackjackGame {
 
 	// defect if dealer wins when player stands - no message displayed
 	public void stand() {
+		dealer.addToHand(holeCard);
 		playerTurn = false;
 		while (dealer.getHand().getHandValue() < 17) {
 			hit(dealer);
@@ -90,7 +91,7 @@ public class BlackjackGame {
 	}
 
 	private void hit(Person p) {
-		Card hitCard = cardShoe.getCard();
+		Card hitCard = cardShoe.getACard();
 		p.addToHand(hitCard);
 		cardsInDeck = cardShoe.getShoe().size();
 	}
@@ -182,6 +183,42 @@ public class BlackjackGame {
 
 	public boolean isGameOver() {
 		return isGameOver;
+	}
+
+	public Shoe getCardShoe() {
+		return cardShoe;
+	}
+
+	public Card getHoleCard() {
+		return holeCard;
+	}
+
+	public int getNumDecks() {
+		return numDecks;
+	}
+
+	public int getBet() {
+		return bet;
+	}
+
+	public boolean isNewGame() {
+		return newGame;
+	}
+
+	public boolean isPlayerWinner() {
+		return playerWinner;
+	}
+
+	public boolean isDealerWinner() {
+		return dealerWinner;
+	}
+
+	public boolean isPush() {
+		return push;
+	}
+
+	public boolean isPlayerTurn() {
+		return playerTurn;
 	}
 
 }

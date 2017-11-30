@@ -8,11 +8,20 @@
 		{{#game.newGame}}
 		<form method="post" action="/newGame">
 			<label>Input the number of decks to play with
-				<input type="text" format="number" name="numDecks" required>
+				<input type="number" name="numDecks" required>
+			</label><br>
+			<label>
+				Input the starting wallet balance(Don't worry, it will soon be gone!)
+				<input type="number" name="walletAmount">
+			</label><br>
+			<label>
+				Input the bet amount (bet more, win more?)
+				<input type="number" name="betAmount">
 			</label>
-			<button>Deal</button>
+			<button>Let's Go!</button>
 		</form>
 		{{/game.newGame}}
+		{{^game.newGame}}
 		<div id="dealerHand" class="cards">
 					<h1>Dealer Hand</h1>
 			<table>
@@ -92,7 +101,7 @@
 		</div>
 		<p>Cards Remaining in current shoe: {{ game.cardsInDeck }}.</p>  
 		<p>Auto shuffle occurs when at or below 15 cards remaining in the shoe and a new hand is started</p>
-		
+		{{/game.newGame}}
 	
 	</body>
 </html>

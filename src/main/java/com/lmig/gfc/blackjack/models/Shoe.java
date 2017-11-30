@@ -13,9 +13,9 @@ public class Shoe {
 
 	private void initialize(int numDecks) {
 		for (int i = 0; i < numDecks; i += 1) {
-			for (Suit s : Suit.values()) {
-				for (Rank r : Rank.values()) {
-					Card card = new Card(s, r);
+			for (Suit suit : Suit.values()) {
+				for (Rank rank : Rank.values()) {
+					Card card = new Card(suit, rank);
 					shoe.add(card);
 				}
 			}
@@ -23,7 +23,7 @@ public class Shoe {
 		Collections.shuffle(shoe);
 	}
 
-	public Card getCard() {
+	public Card getACard() {
 		Card returnCard = shoe.get(0);
 		shoe.remove(0);
 		return returnCard;

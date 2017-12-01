@@ -1,11 +1,10 @@
 //To-DO:
-//Implement something if the player runs out of cash
-//Implement ability to set amount in wallet at game start
 //Implement Dealer and Player win counters
 //change view to use getters
-//More testing on Aces 11/1 logic
 //Review and clean up code in general
 //Extras: Double Down, Insurance
+//See if flags are derivable from somewhere else
+//make methods to have player manage wallet
 
 package com.lmig.gfc.blackjack.models;
 
@@ -13,17 +12,14 @@ public class BlackjackGame {
 	private Shoe cardShoe;
 	private Player player;
 	private Person dealer;
-	private Card holeCard;
-	private int cardsInDeck;
 	private int numDecks;
-	private int bet = 10; // Implement ability to set from user input
+	private int bet;
+	private int originalBet;
 	// private int dealerWins;
 	// private int playerWins;
 	private boolean newGame = true;
-	private boolean isGameOver = false;
-	private boolean playerWinner = false;
-	private boolean dealerWinner = false;
-	private boolean push = false;
+	// private boolean playerWinner = false;
+	// private boolean dealerWinner = false;
 	private boolean playerTurn = true;
 
 	public BlackjackGame() {
@@ -34,6 +30,7 @@ public class BlackjackGame {
 	public void newGame(int numDecks, int walletAmount, int betAmount) {
 		this.numDecks = numDecks;
 		this.bet = betAmount;
+		originalBet = betAmount;
 		newGame = false;
 		cardShoe = new Shoe(numDecks);
 		player = new Player(walletAmount);
@@ -43,47 +40,48 @@ public class BlackjackGame {
 	}
 
 	public void newHand() {
-		if (getWallet().getAmount() >= bet) {
-			setWalletAmount(-bet);
-		}
+		bet = originalBet;
+		if (playerWalletAmount() < bet) {
+			newGame = true;
+		} else {
+			if (playerWalletAmount() >= bet) {
+				walletTransaction(-bet);
+			}
 
-		if (cardsInDeck <= 15) {
-			cardShoe = new Shoe(numDecks);
+			if (getCardsInDeck() <= 15) {
+				cardShoe = new Shoe(numDecks);
+			}
+			// playerWinner = false;
+			// dealerWinner = false;
+			playerTurn = true;
+			player.newHand();
+			dealer.newHand();
+			deal();
 		}
-		isGameOver = false;
-		playerWinner = false;
-		dealerWinner = false;
-		playerTurn = true;
-		push = false;
-		player.newHand();
-		dealer.newHand();
-		deal();
 	}
 
 	private void deal() {
 		hit(player);
 		hit(dealer);
 		hit(player);
-		holeCard = cardShoe.getACard();
-		if (getPlayerHand().isBlackjack() || getDealerHand().isBlackjack()) {
+		hit(dealer);
+		if (player.hasBlackjack() || dealer.hasBlackjack()) {
+			playerTurn = false;
 			evaluateWinner();
 		}
-		cardsInDeck = cardShoe.getShoe().size();
 	}
 
 	public void hitPlayer() {
 		hit(player);
-		if (getPlayerHand().isBusted()) {
+		if (player.isBusted()) {
 			evaluateWinner();
 		}
 
 	}
 
-	// defect if dealer wins when player stands - no message displayed
 	public void stand() {
-		dealer.addToHand(holeCard);
 		playerTurn = false;
-		while (dealer.getHand().getHandValue() < 17) {
+		while (dealer.getHandValue() < 17) {
 			hit(dealer);
 		}
 		evaluateWinner();
@@ -93,60 +91,69 @@ public class BlackjackGame {
 	private void hit(Person p) {
 		Card hitCard = cardShoe.getACard();
 		p.addToHand(hitCard);
-		cardsInDeck = cardShoe.getShoe().size();
 	}
 
-	// Add in player payment logic
 	private void evaluateWinner() {
-		boolean playerBusted = getPlayerHand().isBusted();
-		boolean dealerBusted = getDealerHand().isBusted();
-		boolean playerBlackjack = getPlayerHand().isBlackjack();
-		boolean dealerBlackjack = getDealerHand().isBlackjack();
-		int dealerHandValue = getDealerHand().getHandValue();
-		int playerHandValue = getPlayerHand().getHandValue();
+		playerTurn = false;
+		payPlayer();
+		// if (isPush()) {
+		// payPlayer();
+		// } else if (dealer.isBusted() || (!player.isBusted() && player.getHandValue()
+		// > dealer.getHandValue())) {
+		// payPlayer();
+		// playerWinner = true;
+		// } else {
+		// dealerWinner = true;
+		// }
 
-		if (playerBlackjack || dealerBlackjack) {
-			if (playerBlackjack && dealerBlackjack) {
-				push = true;
-				payPlayer();
-			}
-			if (playerBlackjack) {
-				playerWinner = true;
-				playerTurn = false;
-				payPlayer();
-			} else {
-				dealerWinner = true;
-				playerTurn = false;
-			}
-		} else if (!playerBusted && !dealerBusted) {
-			if (playerHandValue > dealerHandValue) {
-				playerWinner = true;
-				payPlayer();
-			} else if (playerHandValue == dealerHandValue) {
-				push = true;
-				payPlayer();
-			} else {
-				dealerWinner = true;
-			}
-		} else if (dealerBusted) {
-			playerWinner = true;
-			payPlayer();
+		// else if (player.hasBlackjack() || dealer.hasBlackjack()) {
+		// if (player.hasBlackjack()) {
+		// playerWinner = true;
+		// payPlayer();
+		// } else {
+		// dealerWinner = true;
+		// }
+		// } else if (!player.isBusted() && !dealer.isBusted()) {
+		// if (player.getHandValue() > dealer.getHandValue()) {
+		// playerWinner = true;
+		// payPlayer();
+		// } else {
+		// dealerWinner = true;
+		// }
+		// } else if (dealer.isBusted()) {
+		// playerWinner = true;
+		// payPlayer();
+		// }
+
+	}
+
+	public void doubleDown() {
+		walletTransaction(-bet);
+		bet += bet;
+		hitPlayer();
+		if (player.getHand().isBusted()) {
+			evaluateWinner();
 		} else {
-			dealerWinner = true;
+			stand();
 		}
-
-		isGameOver = true;
-
 	}
 
 	private void payPlayer() {
-		if (push) {
-			setWalletAmount(bet);
-		} else if (getPlayerHand().isBlackjack()) {
-			setWalletAmount((bet * 1.5) + bet);
-		} else {
-			setWalletAmount(bet * 2);
+		if (isPush()) {
+			walletTransaction(bet);
+		} else if (isPlayerWinner()) {
+
+			if (getPlayerHand().isBlackjack()) {
+				walletTransaction((bet * 1.5) + bet);
+			} else {
+				walletTransaction(bet * 2);
+			}
 		}
+	}
+
+	public void setOriginalBet(int originalBet) {
+		this.originalBet = originalBet;
+		bet = originalBet;
 	}
 
 	public Hand getPlayerHand() {
@@ -157,48 +164,33 @@ public class BlackjackGame {
 		return dealer.getHand();
 	}
 
-	public Wallet getWallet() {
-		return player.getWallet();
+	public void walletTransaction(double setAmount) {
+		player.setWalletChangeAmount(setAmount);
+		;
 	}
 
-	public void setWalletAmount(double setAmount) {
-		getWallet().setAmount(getWallet().getAmount() + setAmount);
+	public double playerWalletAmount() {
+		return player.getWalletAmount();
 	}
 
-	public Shoe getCardDeck() {
-		return cardShoe;
-	}
-
-	public Player getPlayer() {
-		return player;
-	}
-
-	public Person getDealer() {
-		return dealer;
+	public boolean playerDoubleDownAvailable() {
+		return (player.getHandSize() == 2 && playerWalletAmount() >= bet);
 	}
 
 	public int getCardsInDeck() {
-		return cardsInDeck;
+		return cardShoe.getShoeSize();
 	}
 
-	public boolean isGameOver() {
-		return isGameOver;
-	}
+	// public boolean isHandOver() {
+	// return dealerWinner || playerWinner || isPush();
+	// }
 
-	public Shoe getCardShoe() {
-		return cardShoe;
-	}
-
-	public Card getHoleCard() {
-		return holeCard;
-	}
-
-	public int getNumDecks() {
-		return numDecks;
-	}
-
-	public int getBet() {
-		return bet;
+	public boolean isPush() {
+		if (!playerTurn && !player.isBusted() && !dealer.isBusted()) {
+			return player.getHandValue() == dealer.getHandValue();
+		} else {
+			return false;
+		}
 	}
 
 	public boolean isNewGame() {
@@ -206,15 +198,11 @@ public class BlackjackGame {
 	}
 
 	public boolean isPlayerWinner() {
-		return playerWinner;
+		return dealer.isBusted() || (!player.isBusted() && player.getHandValue() > dealer.getHandValue());
 	}
 
 	public boolean isDealerWinner() {
-		return dealerWinner;
-	}
-
-	public boolean isPush() {
-		return push;
+		return !isPlayerWinner() && !isPush();
 	}
 
 	public boolean isPlayerTurn() {

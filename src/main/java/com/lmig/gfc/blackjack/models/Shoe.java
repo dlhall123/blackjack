@@ -29,8 +29,9 @@ public class Shoe {
 		return returnCard;
 	}
 
-	public ArrayList<Card> getShoe() {
-		return shoe;
+	// size method to get count
+	public int getShoeSize() {
+		return shoe.size();
 	}
 
 }

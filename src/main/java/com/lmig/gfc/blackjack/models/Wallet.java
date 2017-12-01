@@ -16,4 +16,8 @@ public class Wallet {
 		this.amount = amount;
 	}
 
+	public void changeWalletAmount(double change) {
+		amount += change;
+	}
+
 }

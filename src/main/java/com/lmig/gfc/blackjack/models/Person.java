@@ -17,6 +17,22 @@ public class Person {
 		return hand;
 	}
 
+	public int getHandSize() {
+		return hand.getHand().size();
+	}
+
+	public int getHandValue() {
+		return hand.getHandValue();
+	}
+
+	public boolean isBusted() {
+		return hand.isBusted();
+	}
+
+	public boolean hasBlackjack() {
+		return hand.isBlackjack();
+	}
+
 	public void newHand() {
 		hand = new Hand();
 	}

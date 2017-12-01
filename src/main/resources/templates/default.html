@@ -5,25 +5,26 @@
 		<title>Blackjack</title>
 	</head>
 	<body>
-		{{#game.newGame}}
+		{{#game.isNewGame}}
 		<form method="post" action="/newGame">
 			<label>Input the number of decks to play with
-				<input type="number" name="numDecks" required>
+				<input type="number" name="numDecks" value="6" required>
 			</label><br>
 			<label>
 				Input the starting wallet balance(Don't worry, it will soon be gone!)
-				<input type="number" name="walletAmount">
+				<input type="number" name="walletAmount" value="500" required>
 			</label><br>
 			<label>
 				Input the bet amount (bet more, win more?)
-				<input type="number" name="betAmount">
+				<input type="number" name="betAmount" value="10" required>
 			</label>
 			<button>Let's Go!</button>
 		</form>
-		{{/game.newGame}}
-		{{^game.newGame}}
+		{{/game.isNewGame}}
+		{{^game.isNewGame}}
 		<div id="dealerHand" class="cards">
 					<h1>Dealer Hand</h1>
+			{{#game.playerTurn}}
 			<table>
 				<thead>
 					<tr>
@@ -32,16 +33,36 @@
 					</tr>
 				</thead>
 				<tbody>
-					{{#game.getDealerHand.hand}}
+				
+					<tr>
+						<td>{{ game.getDealerHand.hand.0.suit }}</td>
+						<td>{{ game.getDealerHand.hand.0.rank }} </td>
+					</tr>
+				</tbody>
+			</table>
+			<h2>Dealer up-card value: {{game.getDealerHand.hand.0.value}}</h2>					
+			{{/game.playerTurn}}
+			{{^game.playerTurn}}
+			<table>
+				<thead>
+					<tr>
+						<th>Suit</th>
+						<th>Rank</th>
+					</tr>
+				</thead>
+				<tbody>
+				{{#game.getDealerHand.hand}}
 					<tr>
 						<td>{{ suit }}</td>
 						<td>{{ rank }} </td>
 					</tr>
-					{{/game.getDealerHand.hand}}
-	
+				{{/game.getDealerHand.hand}}
+
 				</tbody>
 			</table>
 			<h2>Dealer hand value: {{game.getDealerHand.handValue}}</h2>
+			{{/game.playerTurn}}
+			
 		</div>
 		<div id="playerHand" class="cards">
 			<h1>Player Hand</h1>
@@ -71,9 +92,15 @@
 					<form method="post" action="/stand">
 					<button>Stand</button>
 				</form>
+				{{#game.playerDoubleDownAvailable}}
+				<form method="post" action="/doubleDown">
+				
+					<button>Double Down</button>
+				</form>
+				{{/game.playerDoubleDownAvailable}}
 				{{/game.getPlayerHand.isBusted}}
 			{{/game.playerTurn}}
-			{{#game.isGameOver}}
+			{{^game.isPlayerTurn}}
 				{{#game.getPlayerHand.isBusted}}
 				<h2>player busted!</h2>
 				{{/game.getPlayerHand.isBusted}}
@@ -82,26 +109,33 @@
 				<h2>dealer busted!</h2>
 				{{/game.getDealerHand.isBusted}}			
 				
-				{{#game.playerWinner}}
+				{{#game.isPlayerWinner}}
 				<h1>Player Wins!</h1>
-				{{/game.playerWinner}}
+				{{/game.isPlayerWinner}}
 				
-				{{#game.push}}
+				{{#game.isPush}}
 				<h1>Push</h1>
-				{{/game.push}}
+				{{/game.isPush}}
 				
-				{{#game.dealerWinner}}
+				{{#game.isDealerWinner}}
 				<h1>Dealer Wins!</h1>
-				{{/game.dealerWinner}}		
+				{{/game.isDealerWinner}}		
 				<form method="post" action="/newHand">
 					<button>New Hand</button>
-				</form>	
-			{{/game.isGameOver}}
-			<h2>Player Wallet: ${{game.getWallet.amount}}</h2>
+				</form>	<br>
+				<label>Change Bet Amount:
+					<form method="post" action="changeBet">
+						<input type="number" name="newBetAmount" required>
+						<button>Set Amount</button>
+					</form>
+				</label>
+			{{/game.isPlayerTurn}}
+			<h2>Bet Amount: ${{game.bet}}</h2>
+			<h2>Player Wallet: ${{game.playerWalletAmount}}</h2>
 		</div>
-		<p>Cards Remaining in current shoe: {{ game.cardsInDeck }}.</p>  
+		<p>Cards Remaining in current shoe: {{ game.getCardsInDeck }}.</p>  
 		<p>Auto shuffle occurs when at or below 15 cards remaining in the shoe and a new hand is started</p>
-		{{/game.newGame}}
+		{{/game.isNewGame}}
 	
 	</body>
 </html>

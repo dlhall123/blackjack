@@ -12,4 +12,13 @@ public class Player extends Person {
 		return wallet;
 	}
 
+	public double getWalletAmount() {
+		return wallet.getAmount();
+	}
+
+	public void setWalletChangeAmount(double amount) {
+		wallet.changeWalletAmount(amount);
+
+	}
+
 }

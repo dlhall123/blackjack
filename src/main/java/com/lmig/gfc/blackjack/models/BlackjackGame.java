@@ -38,7 +38,7 @@ public class BlackjackGame {
 				walletTransaction(-getPlayerBet());
 			}
 
-			if (getCardsInDeck() <= 15) {
+			if (getNumCardsInDeck() <= 15) {
 				cardShoe = new Shoe(numDecks);
 			}
 			playerTurn = true;
@@ -127,7 +127,7 @@ public class BlackjackGame {
 		;
 	}
 
-	public double playerWalletAmount() {
+	private double playerWalletAmount() {
 		return player.getWalletAmount();
 	}
 
@@ -135,7 +135,7 @@ public class BlackjackGame {
 		return (player.getHandSize() == 2 && playerWalletAmount() >= getPlayerBet());
 	}
 
-	public int getCardsInDeck() {
+	public int getNumCardsInDeck() {
 		return cardShoe.getShoeSize();
 	}
 

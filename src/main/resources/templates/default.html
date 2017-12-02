@@ -5,18 +5,19 @@
 		<title>Blackjack</title>
 	</head>
 	<body>
+		<h1>Blackjack</h1>
 		{{#game.isNewGame}}
 		<form method="post" action="/newGame">
-			<label>Input the number of decks to play with
-				<input type="number" name="numDecks" value="6" required>
+			<label>Input the number of decks to play with (default = 6)
+				<input type="number" name="numDecks">
 			</label><br>
 			<label>
-				Input the starting wallet balance(Don't worry, it will soon be gone!)
-				<input type="number" name="walletAmount" value="500" step="0.01" required>
+				Input the starting wallet balance (Default = $500.00)
+				<input type="number" name="walletAmount" step="0.01">
 			</label><br>
 			<label>
-				Input the bet amount (bet more, win more?)
-				<input type="number" name="betAmount" value="10" step="0.01" required>
+				Input the bet amount (Default = $50.00)
+				<input type="number" name="betAmount" step="0.01">
 			</label>
 			<button>Let's Go!</button>
 		</form>
@@ -146,7 +147,7 @@
 			<h2>Bet Amount: ${{game.getPlayerBet}}</h2>
 			<h2>Player Wallet: ${{game.playerWalletAmount}}</h2>
 		</div>
-		<p>Cards Remaining in current shoe: {{ game.getCardsInDeck }}.</p>  
+		<p>Cards Remaining in current shoe: {{ game.getNumCardsInDeck }}.</p>  
 		<p>Auto shuffle occurs when at or below 15 cards remaining in the shoe and a new hand is started</p>
 		{{/game.isNewGame}}
 	

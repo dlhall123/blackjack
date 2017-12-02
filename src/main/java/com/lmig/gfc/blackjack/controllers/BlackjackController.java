@@ -24,7 +24,16 @@ public class BlackjackController {
 	}
 
 	@PostMapping("/newGame")
-	public ModelAndView deal(int numDecks, double walletAmount, double betAmount) {
+	public ModelAndView deal(Integer numDecks, Double walletAmount, Double betAmount) {
+		if (numDecks == null) {
+			numDecks = 6;
+		}
+		if (walletAmount == null) {
+			walletAmount = 500d;
+		}
+		if (betAmount == null) {
+			betAmount = 50d;
+		}
 		game = new BlackjackGame();
 		game.newGame(numDecks, walletAmount, betAmount);
 		game.newHand();

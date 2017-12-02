@@ -3,10 +3,10 @@ package com.lmig.gfc.blackjack.models;
 public class Player extends Person {
 	Wallet wallet;
 	Hand splitHand;
-	int originalBet;
-	int bet;
+	double originalBet;
+	double bet;
 
-	public Player(int walletAmount, int betAmount) {
+	public Player(double walletAmount, double betAmount) {
 		super();
 		wallet = new Wallet(walletAmount);
 		this.bet = betAmount;
@@ -31,11 +31,11 @@ public class Player extends Person {
 		splitHand.addToHand(getFirstCardFromHand());
 	}
 
-	public int getBet() {
+	public double getBet() {
 		return bet;
 	}
 
-	public void setBet(int bet) {
+	public void setBet(double bet) {
 		this.bet = bet;
 	}
 

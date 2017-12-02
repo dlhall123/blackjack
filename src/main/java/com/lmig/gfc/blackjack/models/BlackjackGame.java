@@ -20,7 +20,7 @@ public class BlackjackGame {
 		dealer = null;
 	}
 
-	public void newGame(int numDecks, int walletAmount, int betAmount) {
+	public void newGame(int numDecks, double walletAmount, double betAmount) {
 		this.numDecks = numDecks;
 		newGame = false;
 		cardShoe = new Shoe(numDecks);
@@ -105,7 +105,7 @@ public class BlackjackGame {
 		}
 	}
 
-	public void setNewBetAmount(int newBet) {
+	public void setNewBetAmount(double newBet) {
 		player.setBet(newBet);
 		player.setOriginalBet();
 	}
@@ -118,7 +118,7 @@ public class BlackjackGame {
 		return dealer.getHand();
 	}
 
-	public int getPlayerBet() {
+	public double getPlayerBet() {
 		return player.getBet();
 	}
 

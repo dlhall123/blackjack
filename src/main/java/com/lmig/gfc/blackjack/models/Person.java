@@ -37,4 +37,15 @@ public class Person {
 		hand = new Hand();
 	}
 
+	public int getCardValue(int index) {
+		return hand.getHand().get(index).getValue();
+	}
+
+	// protected method to return a card for a split
+	protected Card getFirstCardFromHand() {
+		Card returnCard = hand.getHand().get(0);
+		hand.getHand().remove(0);
+		return returnCard;
+	}
+
 }

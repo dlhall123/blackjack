@@ -98,6 +98,12 @@
 					<button>Double Down</button>
 				</form>
 				{{/game.playerDoubleDownAvailable}}
+				{{#game.splitIsAvailable}}
+				<form method="post" action="/split">
+				
+					<button>Split</button>
+				</form>
+				{{/game.splitIsAvailable}}
 				{{/game.getPlayerHand.isBusted}}
 			{{/game.playerTurn}}
 			{{^game.isPlayerTurn}}
@@ -129,8 +135,15 @@
 						<button>Set Amount</button>
 					</form>
 				</label>
+				{{#game.isPlayerBroke}}
+				<h2>out of cash to bet at current level.  Please lower bet or start a new game.</h2>
+				<form method="post" action="/brokeNewGame">
+				<button>New Game</button>
+				</form>
+				{{/game.isPlayerBroke}}
 			{{/game.isPlayerTurn}}
-			<h2>Bet Amount: ${{game.bet}}</h2>
+				
+			<h2>Bet Amount: ${{game.getPlayerBet}}</h2>
 			<h2>Player Wallet: ${{game.playerWalletAmount}}</h2>
 		</div>
 		<p>Cards Remaining in current shoe: {{ game.getCardsInDeck }}.</p>  

@@ -27,12 +27,14 @@ public class BlackjackController {
 	public ModelAndView deal(int numDecks, int walletAmount, int betAmount) {
 		game = new BlackjackGame();
 		game.newGame(numDecks, walletAmount, betAmount);
+		game.newHand();
+		game.deal();
 		return redirectToHome();
 	}
 
 	@PostMapping("/changeBet")
 	public ModelAndView changeBet(int newBetAmount) {
-		game.setOriginalBet(newBetAmount);
+		game.setNewBetAmount(newBetAmount);
 		return redirectToHome();
 	}
 
@@ -51,12 +53,19 @@ public class BlackjackController {
 	@PostMapping("/newHand")
 	public ModelAndView newHand() {
 		game.newHand();
+		game.deal();
 		return redirectToHome();
 	}
 
 	@PostMapping("/doubleDown")
 	public ModelAndView doubleDown() {
 		game.doubleDown();
+		return redirectToHome();
+	}
+
+	@PostMapping("/brokeNewGame")
+	public ModelAndView brokeNewGame() {
+		game = new BlackjackGame();
 		return redirectToHome();
 	}
 

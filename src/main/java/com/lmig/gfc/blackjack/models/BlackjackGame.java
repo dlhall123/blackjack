@@ -127,7 +127,7 @@ public class BlackjackGame {
 		;
 	}
 
-	private double playerWalletAmount() {
+	public double playerWalletAmount() {
 		return player.getWalletAmount();
 	}
 

@@ -66,6 +66,7 @@
 			
 		</div>
 		<div id="playerHand" class="cards">
+			{{^game.isSplit}}
 			<h1>Player Hand</h1>
 			<table>
 				<thead>
@@ -81,10 +82,76 @@
 						<td>{{ rank }} </td>
 					</tr>
 					{{/game.getPlayerHand.hand}}
-	
 				</tbody>
 			</table>
 			<h2>Player hand value: {{game.getPlayerHand.handValue}}</h2>
+			{{/game.isSplit}}
+			{{#game.isSplit}}
+			<h1>Player Hand #1</h1>
+			<table>
+				<thead>
+					<tr>
+						<th>Suit</th>
+						<th>Rank</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#game.getPlayerHand.hand}}
+					<tr>
+						<td>{{ suit }}</td>
+						<td>{{ rank }} </td>
+					</tr>
+					{{/game.getPlayerHand.hand}}
+				</tbody>
+			</table>
+			<h2>Player hand #1 value: {{game.getPlayerHand.handValue}}</h2>
+				{{^game.isPlayerTurn}}
+					{{#game.isPlayerWinner}}
+					<h2>Player Hand 1 Wins!</h1>
+					{{/game.isPlayerWinner}}
+					
+					{{#game.isPush}}
+					<h2>Hand 1 Push</h1>
+					{{/game.isPush}}
+					
+					{{#game.isDealerWinner}}
+					<h2>Hand 1 Loss - Dealer Wins</h1>
+					{{/game.isDealerWinner}}
+				{{/game.isPlayerTurn}}
+			<hr>
+			<h1>Player Hand #2</h1>
+			<table>
+				<thead>
+					<tr>
+						<th>Suit</th>
+						<th>Rank</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#game.getPlayerSplitHand.hand}}
+					<tr>
+						<td>{{ suit }}</td>
+						<td>{{ rank }} </td>
+					</tr>
+					{{/game.getPlayerSplitHand.hand}}
+				</tbody>
+			</table>
+			<h2>Player hand #2 value: {{game.getPlayerSplitHand.handValue}}</h2>
+				{{^game.isPlayerTurn}}
+					
+					{{#game.isSplitWinner}}
+					<h2>Player Hand 2 Wins!</h2>
+					{{/game.isSplitWinner}}
+					
+					{{#game.isSplitPush}}
+					<h2>Player Hand 2 Push</h2>
+					{{/game.isSplitPush}}
+					
+					{{#game.isSplitDealerWinner}}
+					<h2>Hand 2 Loss - Dealer Wins</h2>
+					{{/game.isSplitDealerWinner}}
+				{{/game.isPlayerTurn}}
+			{{/game.isSplit}}
 			{{#game.playerTurn}}			
 				{{^game.getPlayerHand.isBusted}}
 				<form method="post" action="/hit">
@@ -108,25 +175,26 @@
 				{{/game.getPlayerHand.isBusted}}
 			{{/game.playerTurn}}
 			{{^game.isPlayerTurn}}
-				{{#game.getPlayerHand.isBusted}}
-				<h2>player busted!</h2>
-				{{/game.getPlayerHand.isBusted}}
-				
+				{{^game.isSplit}}
+					{{#game.getPlayerHand.isBusted}}
+					<h2>player busted!</h2>
+					{{/game.getPlayerHand.isBusted}}			
+					
+					{{#game.isPlayerWinner}}
+					<h1>Player Wins!</h1>
+					{{/game.isPlayerWinner}}
+					
+					{{#game.isPush}}
+					<h1>Push</h1>
+					{{/game.isPush}}
+					
+					{{#game.isDealerWinner}}
+					<h1>Dealer Wins!</h1>
+					{{/game.isDealerWinner}}
+				{{/game.isSplit}}
 				{{#game.getDealerHand.isBusted}}
 				<h2>dealer busted!</h2>
-				{{/game.getDealerHand.isBusted}}			
-				
-				{{#game.isPlayerWinner}}
-				<h1>Player Wins!</h1>
-				{{/game.isPlayerWinner}}
-				
-				{{#game.isPush}}
-				<h1>Push</h1>
-				{{/game.isPush}}
-				
-				{{#game.isDealerWinner}}
-				<h1>Dealer Wins!</h1>
-				{{/game.isDealerWinner}}
+				{{/game.getDealerHand.isBusted}}
 				{{^game.isPlayerBroke}}		
 				<form method="post" action="/newHand">
 					<button>New Hand</button>
@@ -144,12 +212,13 @@
 				<button>New Game</button>
 				</form>
 				{{/game.isPlayerBroke}}
+				<h2>Amount Paid(including initial bet amount): ${{game.amountPaid}}</h2>
 			{{/game.isPlayerTurn}}
 				
 			<h2>Bet Amount: ${{game.getPlayerBet}}</h2>
 			<h2>Player Wallet: ${{game.playerWalletAmount}}</h2>
 		</div>
-		<p>Cards Remaining in current shoe: {{ game.getNumCardsInDeck }}.</p>  
+		<p>Cards Remaining in current shoe: {{ game.getNumCardsInShoe }}.</p>  
 		<p>Auto shuffle occurs when at or below 15 cards remaining in the shoe and a new hand is started</p>
 		{{/game.isNewGame}}
 	

@@ -47,6 +47,13 @@ public class Hand {
 		return hand;
 	}
 
+	public Card getCardFromHand(int index) {
+		Card returnCard = hand.get(index);
+		handValue -= returnCard.getValue();
+		hand.remove(index);
+		return returnCard;
+	}
+
 	public int getHandValue() {
 		return handValue;
 	}

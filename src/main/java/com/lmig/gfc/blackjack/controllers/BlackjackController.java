@@ -59,6 +59,12 @@ public class BlackjackController {
 		return redirectToHome();
 	}
 
+	@PostMapping("/split")
+	public ModelAndView split() {
+		game.split();
+		return redirectToHome();
+	}
+
 	@PostMapping("/newHand")
 	public ModelAndView newHand() {
 		game.newHand();

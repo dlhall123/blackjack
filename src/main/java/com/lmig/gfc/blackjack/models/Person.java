@@ -43,9 +43,7 @@ public class Person {
 
 	// protected method to return a card for a split
 	protected Card getFirstCardFromHand() {
-		Card returnCard = hand.getHand().get(0);
-		hand.getHand().remove(0);
-		return returnCard;
+		return hand.getCardFromHand(0);
 	}
 
 }

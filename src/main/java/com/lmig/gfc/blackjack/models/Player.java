@@ -31,6 +31,22 @@ public class Player extends Person {
 		splitHand.addToHand(getFirstCardFromHand());
 	}
 
+	public void addToSplitHand(Card card) {
+		splitHand.addToHand(card);
+	}
+
+	public Hand getSplitHand() {
+		return splitHand;
+	}
+
+	public boolean isSplitHandBusted() {
+		return splitHand.isBusted();
+	}
+
+	public int getSplitHandValue() {
+		return splitHand.getHandValue();
+	}
+
 	public double getBet() {
 		return bet;
 	}
@@ -49,6 +65,10 @@ public class Player extends Person {
 
 	public boolean isBroke() {
 		return getWalletAmount() < bet;
+	}
+
+	public double getOriginalBet() {
+		return originalBet;
 	}
 
 }

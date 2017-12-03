@@ -64,7 +64,7 @@ public class Player extends Person {
 	}
 
 	public boolean isBroke() {
-		return getWalletAmount() < bet;
+		return getWalletAmount() < originalBet;
 	}
 
 	public double getOriginalBet() {

@@ -126,13 +126,15 @@
 				
 				{{#game.isDealerWinner}}
 				<h1>Dealer Wins!</h1>
-				{{/game.isDealerWinner}}		
+				{{/game.isDealerWinner}}
+				{{^game.isPlayerBroke}}		
 				<form method="post" action="/newHand">
 					<button>New Hand</button>
 				</form>	<br>
+				{{/game.isPlayerBroke}}
 				<label>Change Bet Amount:
 					<form method="post" action="changeBet">
-						<input type="number" name="newBetAmount" step="0.01" required>
+						<input type="number" name="newBetAmount" step="0.01" min="0.01" max="{{game.playerWalletAmount}}" required>
 						<button>Set Amount</button>
 					</form>
 				</label>

@@ -10,8 +10,6 @@ public class BlackjackGame {
 	private Player player;
 	private Person dealer;
 	private int numDecks;
-	// private int dealerWins;
-	// private int playerWins;
 	private boolean newGame = true;
 	private boolean playerTurn = true;
 
@@ -165,10 +163,6 @@ public class BlackjackGame {
 
 	public boolean splitIsAvailable() {
 		return player.getHandSize() == 2 && player.getCardValue(0) == player.getCardValue(1);
-	}
-
-	public boolean insuranceIsAvailable() {
-		return dealer.getCardValue(0) == 11;
 	}
 
 	public boolean isPlayerBroke() {

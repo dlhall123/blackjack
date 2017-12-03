@@ -93,4 +93,40 @@ public class BlackjackGameTests {
 		// Assert
 		assertThat(blackjackGame.playerWalletAmount()).isEqualTo(0);
 	}
+
+	@Test
+	public void newGame_true_when_wallet_less_than_bet() {
+		// Arrange
+		blackjackGame.newGame(1, 30, 40);
+
+		// Act
+		blackjackGame.newHand();
+
+		// Assert
+		assertThat(blackjackGame.isNewGame()).isEqualTo(true);
+	}
+
+	@Test
+	public void newGame_false_when_wallet_more_than_bet() {
+		// Arrange
+		blackjackGame.newGame(1, 40, 30);
+
+		// Act
+		blackjackGame.newHand();
+
+		// Assert
+		assertThat(blackjackGame.isNewGame()).isEqualTo(false);
+	}
+
+	@Test
+	public void newGame_false_when_wallet_equal_to_bet() {
+		// Arrange
+		blackjackGame.newGame(1, 40, 40);
+
+		// Act
+		blackjackGame.newHand();
+
+		// Assert
+		assertThat(blackjackGame.isNewGame()).isEqualTo(false);
+	}
 }

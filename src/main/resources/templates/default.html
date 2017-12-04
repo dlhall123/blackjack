@@ -152,27 +152,38 @@
 					{{/game.isSplitDealerWinner}}
 				{{/game.isPlayerTurn}}
 			{{/game.isSplit}}
-			{{#game.playerTurn}}			
-				{{^game.getPlayerHand.isBusted}}
-				<form method="post" action="/hit">
-					<button>Hit</button>
-				</form>
-					<form method="post" action="/stand">
-					<button>Stand</button>
-				</form>
-				{{#game.playerDoubleDownAvailable}}
-				<form method="post" action="/doubleDown">
-				
-					<button>Double Down</button>
-				</form>
-				{{/game.playerDoubleDownAvailable}}
-				{{#game.splitIsAvailable}}
-				<form method="post" action="/split">
-				
-					<button>Split</button>
-				</form>
-				{{/game.splitIsAvailable}}
-				{{/game.getPlayerHand.isBusted}}
+			{{#game.playerTurn}}
+				{{#game.insuranceIsAvailable}}
+						<h2>Insurance (Or even money if you have blackjack)?</h2>
+					<form method="post" action="/insuranceYes">
+						<button>Yes</button>
+					</form>
+						<form method="post" action="/insuranceNo">
+						<button>No</button>
+					</form>
+				{{/game.insuranceIsAvailable}}
+				{{^game.insuranceIsAvailable}}			
+					{{^game.getPlayerHand.isBusted}}
+					<form method="post" action="/hit">
+						<button>Hit</button>
+					</form>
+						<form method="post" action="/stand">
+						<button>Stand</button>
+					</form>
+					{{#game.playerDoubleDownAvailable}}
+					<form method="post" action="/doubleDown">
+					
+						<button>Double Down</button>
+					</form>
+					{{/game.playerDoubleDownAvailable}}
+					{{#game.splitIsAvailable}}
+					<form method="post" action="/split">
+					
+						<button>Split</button>
+					</form>
+					{{/game.splitIsAvailable}}
+					{{/game.getPlayerHand.isBusted}}
+				{{/game.insuranceIsAvailable}}
 			{{/game.playerTurn}}
 			{{^game.isPlayerTurn}}
 				{{^game.isSplit}}
@@ -214,8 +225,13 @@
 				{{/game.isPlayerBroke}}
 				<h2>Amount Paid(including initial bet amount): ${{game.amountPaid}}</h2>
 			{{/game.isPlayerTurn}}
-				
-			<h2>Bet Amount: ${{game.getPlayerBet}}</h2>
+			{{#game.insuranceTaken}}
+			<h2>Original bet amount: ${{game.player.getOriginalBet}}</h2>
+			{{/game.insuranceTaken}}	
+			{{#game.isSplit}}
+			<h2>Original bet amount: ${{game.player.getOriginalBet}}</h2>
+			{{/game.isSplit}}	
+			<h2>Total Bet Amount: ${{game.getPlayerBet}}</h2>
 			<h2>Player Wallet: ${{game.playerWalletAmount}}</h2>
 		</div>
 		<p>Cards Remaining in current shoe: {{ game.getNumCardsInShoe }}.</p>  

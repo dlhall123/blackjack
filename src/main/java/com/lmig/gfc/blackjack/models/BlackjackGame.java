@@ -8,6 +8,8 @@ public class BlackjackGame {
 	private boolean newGame = true;
 	private boolean playerTurn = true;
 	private boolean isSplit = false;
+	private boolean insurance = false;// Insurance
+	private boolean insuranceTaken = false;
 	private double amountPaid = 0d;
 
 	public BlackjackGame() {
@@ -49,6 +51,8 @@ public class BlackjackGame {
 			amountPaid = 0d;
 			playerTurn = true;
 			isSplit = false;
+			insurance = false;
+			insuranceTaken = false;
 			// create new hands for the player and dealer
 			player.newHand();
 			dealer.newHand();
@@ -64,8 +68,10 @@ public class BlackjackGame {
 		hit(dealer);
 		// If either the player or dealer get a blackjack, game is over, evaluate
 		// payments
-		if (player.hasBlackjack() || dealer.hasBlackjack()) {
-			payPlayer();
+		if (!insuranceIsAvailable()) {
+			if (player.hasBlackjack() || dealer.hasBlackjack()) {
+				payPlayer();
+			}
 		}
 	}
 
@@ -134,7 +140,35 @@ public class BlackjackGame {
 		stand();
 	}
 
+	public void insuranceNo() {
+		insurance = true;
+		if (player.hasBlackjack() || dealer.hasBlackjack()) {
+			payPlayer();
+		}
+
+	}
+
+	public void insuranceYes() {
+		insurance = true;
+		insuranceTaken = true;
+		double playerBet = getPlayerBet();
+		walletTransaction(-playerBet * 0.5);
+		player.setBet(playerBet * 1.5);
+		if (dealer.hasBlackjack()) {
+			walletTransaction((playerBet * 0.5) * 3);
+			amountPaid += (playerBet * 0.5) * 3;
+			payPlayer();
+		} else if (player.hasBlackjack()) {
+			payPlayer();
+		}
+	}
+
 	private void payPlayer() {
+		double playerBet = getPlayerBet();
+		if (insuranceTaken) {
+			playerBet = (getPlayerBet() / 3) * 2;
+		}
+
 		// Set player turn = false so that the appropriate display controls disappear
 		playerTurn = false;
 		if (isSplit) {
@@ -144,18 +178,18 @@ public class BlackjackGame {
 		else {
 			// if hand is a push, add the bet amount to the player wallet
 			if (isPush()) {
-				amountPaid = getPlayerBet();
-				walletTransaction(getPlayerBet());
+				amountPaid += playerBet;
+				walletTransaction(playerBet);
 			} else if (isPlayerWinner()) {
 				// pay blackjack at 3:2, or bet * 1.5
 				if (getPlayerHand().isBlackjack()) {
-					amountPaid = (getPlayerBet() * 1.5) + getPlayerBet();
-					walletTransaction((getPlayerBet() * 1.5) + getPlayerBet());
+					amountPaid += (playerBet * 1.5) + playerBet;
+					walletTransaction((playerBet * 1.5) + playerBet);
 				}
 				// pay all other wins at 1:1
 				else {
-					amountPaid = getPlayerBet() * 2;
-					walletTransaction(getPlayerBet() * 2);
+					amountPaid += playerBet * 2;
+					walletTransaction(playerBet * 2);
 				}
 			}
 		}
@@ -291,6 +325,11 @@ public class BlackjackGame {
 	public boolean splitIsAvailable() {
 		return player.getHandSize() == 2 && player.getCardValue(0) == player.getCardValue(1) && !isPlayerBroke()
 				&& !isSplit;
+	}
+
+	// returns whether or not insurance is available
+	public boolean insuranceIsAvailable() {
+		return player.getHandSize() == 2 && getDealerHand().getHand().get(0).getValue() == 11 && !insurance;
 	}
 
 	// returns if the player is broke

@@ -84,6 +84,18 @@ public class BlackjackController {
 		return redirectToHome();
 	}
 
+	@PostMapping("/insuranceNo")
+	public ModelAndView insuranceNo() {
+		game.insuranceNo();
+		return redirectToHome();
+	}
+
+	@PostMapping("/insuranceYes")
+	public ModelAndView insuranceYes() {
+		game.insuranceYes();
+		return redirectToHome();
+	}
+
 	private ModelAndView redirectToHome() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/");

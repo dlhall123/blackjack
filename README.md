@@ -6,4 +6,9 @@ The first user entry screen allows the user to input the number of decks, the ba
 
 once that information is entered, the actual game begins.
 
-The game provides the "normal rules" and pays for blackjack, with the player being allowed to hit, stand, double down, or split the hand (doubling and splitting only allowed during the appropriate situations).
+The game provides the "normal rules" and pays for blackjack, with the player being allowed to:
+-hit
+-stand
+-double down (any first 2 cards, except blackjack
+-split the hand (two initial cards have the same value)
+-take insurance/even money (when the dealer's up card is an Ace)

@@ -13,6 +13,6 @@ The game provides the "normal rules" and pays for blackjack, with the player bei
 - split the hand (two initial cards have the same value)
 - take insurance/even money (when the dealer's up card is an Ace)
 
-#Future Improvements
+# Future Improvements
 
 -make Split so that a player can take more cards after the initial hand split

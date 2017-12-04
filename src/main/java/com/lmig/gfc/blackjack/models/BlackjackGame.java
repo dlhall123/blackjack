@@ -126,12 +126,10 @@ public class BlackjackGame {
 		player.setBet(getPlayerBet() * 2);
 		// Call the split method on the player
 		player.split();
-		// get two new cards from the show
-		Card splitCard1 = cardShoe.getACard();
-		Card splitCard2 = cardShoe.getACard();
-		// give the new cards to the player to add to original and split hand
-		player.addToHand(splitCard1);
-		player.addToSplitHand(splitCard2);
+		// call hit method to get a card for the players first hand
+		hit(player);
+		// add a card to the split hand
+		player.addToSplitHand(cardShoe.getACard());
 		// no hitting after split implemented, so call the stand method
 		stand();
 	}

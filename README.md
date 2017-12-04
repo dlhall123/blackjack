@@ -15,4 +15,4 @@ The game provides the "normal rules" and pays for blackjack, with the player bei
 
 # Future Improvements
 
--make Split so that a player can take more cards after the initial hand split
+- make Split so that a player can take more cards after the initial hand split
